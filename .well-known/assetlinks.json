@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tcsc.vn.mobiletrading",
+      "sha256_cert_fingerprints": [
+        "65:82:8C:AC:76:06:01:B5:A1:FA:6D:94:0F:CD:38:85:68:39:A4:B1:80:71:0D:E2:40:A0:37:5B:CF:6F:2F:81",
+        "A5:1A:B1:7D:BC:71:A5:65:12:5C:B3:13:AD:F0:1A:10:7C:94:59:D1:42:73:D7:AB:BC:0D:D3:FC:D1:19:0E:98"
+      ]
+    }
+  }
+]
