@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account Register | TCSC</title>
+  <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID, app-argument=https://spcable.github.io/tcsc.github.io/account-register">
+  <style>
+    body { font-family: system-ui, sans-serif; text-align: center; padding: 20px; }
+    .btn { display: inline-block; padding: 12px 24px; background: #0b5fff; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+    .debug { margin-top: 20px; font-family: monospace; color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Đăng Ký Tài Khoản</h1>
+  <p>Đang thử mở ứng dụng...</p>
+  
+  <p>
+    <a href="tcismart://account-register" class="btn">Mở bằng App (Scheme)</a>
+  </p>
+  <p>
+    <a href="https://play.google.com/store/apps/details?id=com.tcsc.vn.mobiletrading" style="color:#666">Tải App nếu chưa cài đặt</a>
+  </p>
+
+  <div class="debug">
+    Path: /account-register<br>
+    Scheme: tcismart://account-register
+  </div>
+
+  <script>
+    // Tự động thử mở custom scheme khi vào trang này
+    window.onload = function() {
+      // Lấy query param từ URL hiện tại (ví dụ: ?NIEMCT0099)
+      var queryParams = window.location.search || "";
+      var schemeUrl = "tcismart://account-register" + queryParams;
+      
+      // Cập nhật nút bấm và debug info
+      var btn = document.querySelector('a.btn');
+      if (btn) btn.href = schemeUrl;
+      
+      var debugDiv = document.querySelector('.debug');
+      if (debugDiv) {
+        debugDiv.innerHTML += "<br>Param: " + (queryParams || "(none)") + 
+                              "<br>Full Scheme: " + schemeUrl;
+      }
+
+      // Chỉ thử redirect nếu không phải là bot crawler
+      if (!/bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent)) {
+        setTimeout(function() {
+          window.location.href = schemeUrl;
+        }, 500);
+      }
+    };
+  </script>
+</body>
+</html>
