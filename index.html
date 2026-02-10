@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TCSC GitHub Pages</title>
+
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 40px; line-height: 1.6; }
     a { color: #0b5fff; text-decoration: none; }
@@ -11,13 +12,55 @@
     .card { max-width: 760px; }
     ul { padding-left: 20px; }
     code { background: #f4f5f7; padding: 2px 6px; border-radius: 4px; }
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: #0b5fff;
+      color: white;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: #222;
+    }
   </style>
+
+  <!-- iOS Smart Banner -->
   <meta name="apple-itunes-app" content="app-id=, app-argument=https://spcable.github.io/tcsc.github.io/">
+
 </head>
+
 <body>
   <div class="card">
     <h1>TCSC GitHub Pages</h1>
     <p>Trang index cho kiểm thử Universal Links (iOS) và App Links (Android).</p>
+
+    <h2>Deep Links / App Links</h2>
+    <p>Các điểm cuối tương ứng với <code>/account-register</code> (theo Android manifest).</p>
+
+    <div>
+      <p><b>Mở bằng HTTP(S) (App Links nếu đã cấu hình):</b></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" data-host="http://192.168.18.231">192.168.18.231</button>
+        <button class="btn" data-host="https://uatkrxps.tcsc.vn">uatkrxps.tcsc.vn</button>
+        <button class="btn" data-host="https://spcable.github.io">spcable.github.io</button>
+        <button class="btn" data-host="https://tcsc-qrcode.netlify.app">tcsc-qrcode.netlify.app</button>
+      </div>
+
+      <br>
+      <p><b>Mở bằng scheme tùy chỉnh (Custom URI):</b></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="openSchemeBtn">tcismart://account-register</button>
+      </div>
+
+      <br>
+      <a class="btn btn-secondary" target="_blank"
+         href="https://play.google.com/store/apps/details?id=com.tcsc.vn.mobiletrading">
+        📌 Tải / Mở trên CH Play
+      </a>
+    </div>
 
     <h2>Liên kết kiểm tra</h2>
     <p>Domain chính: <code>https://spcable.github.io/tcsc.github.io/</code></p>
@@ -31,8 +74,52 @@
     </ul>
 
     <h2>Hướng dẫn</h2>
-    <p>Bật <code>Associated Domains</code> trên iOS với <code>applinks:spcable.github.io</code> và cấu hình Android App Links theo <code>assetlinks.json</code>.
-    Lưu ý: iOS/Android yêu cầu file xác thực ở gốc domain (<code>https://spcable.github.io/.well-known/...</code>). Nếu site chạy ở đường dẫn <code>/tcsc.github.io/</code>, cần host AASA/assetlinks ở gốc domain hoặc dùng domain riêng.</p>
+    <p>
+      Bật <code>Associated Domains</code> trên iOS với <code>applinks:spcable.github.io</code>
+      và cấu hình Android App Links theo <code>assetlinks.json</code>.
+    </p>
+    <p>
+      <b>Lưu ý quan trọng:</b> GitHub Pages chạy dạng path <code>/tcsc.github.io/</code> nên Android App Links dễ fail.
+      Muốn chuẩn nhất nên dùng domain riêng hoặc host file xác thực ở root domain.
+    </p>
   </div>
+
+    <script>
+    // ==== CONFIG ====
+    const PACKAGE_NAME = "com.tcsc.vn.mobiletrading";
+    const SCHEME = "tcismart";
+    const FALLBACK_PLAYSTORE = `https://play.google.com/store/apps/details?id=${PACKAGE_NAME}`;
+
+    const DEEP_LINK_PATH = "/account-register";
+
+    function isAndroid() { return /Android/i.test(navigator.userAgent); }
+
+    function openHttpDeepLink(host) {
+      const url = host.replace(/\/$/, '') + DEEP_LINK_PATH;
+      // Try to open the https/http URL (App Links will take it if verified)
+      window.location.href = url;
+
+      // Fallback to Play Store if app not installed / not handling link
+      setTimeout(() => { window.location.href = FALLBACK_PLAYSTORE; }, 1500);
+    }
+
+    function openCustomScheme() {
+      const url = `${SCHEME}://${DEEP_LINK_PATH.replace(/^\//, '')}`;
+      window.location.href = url;
+      setTimeout(() => { window.location.href = FALLBACK_PLAYSTORE; }, 1500);
+    }
+
+    // Wire buttons
+    document.querySelectorAll('button[data-host]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openHttpDeepLink(btn.getAttribute('data-host'));
+      });
+    });
+    document.getElementById('openSchemeBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      openCustomScheme();
+    });
+    </script>
 </body>
 </html>
