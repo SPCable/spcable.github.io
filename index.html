@@ -6,7 +6,8 @@
   <title>TCSC GitHub Pages</title>
 
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 40px; line-height: 1.6; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; line-height: 1.6; }
+    .content { margin: 40px; }
     a { color: #0b5fff; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .card { max-width: 760px; }
@@ -20,20 +21,82 @@
       color: white;
       font-weight: 600;
       margin-top: 10px;
+      cursor: pointer;
+      border: none;
     }
     .btn:hover { opacity: 0.9; }
     .btn-secondary {
       background: #222;
     }
+    /* Android Smart Banner */
+    #android-banner {
+      display: none;
+      background: #f4f4f4;
+      border-bottom: 1px solid #ccc;
+      padding: 10px;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    #android-banner .info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #android-banner .icon {
+      width: 40px;
+      height: 40px;
+      background: #ddd;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #555;
+    }
+    #android-banner .text h3 { margin: 0; font-size: 14px; color: #000; }
+    #android-banner .text p { margin: 0; font-size: 12px; color: #666; }
+    #android-banner .close {
+      font-size: 20px;
+      color: #888;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    #android-banner .view-btn {
+      color: #0b5fff;
+      font-weight: bold;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
   </style>
 
-  <!-- iOS Smart Banner -->
-  <meta name="apple-itunes-app" content="app-id=, app-argument=https://spcable.github.io/tcsc.github.io/">
-
+  <!-- iOS Smart Banner: Cần điền App ID số (VD: 123456789) vào app-id -->
+  <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID_HERE, app-argument=https://spcable.github.io/tcsc.github.io/">
 </head>
 
 <body>
-  <div class="card">
+  <!-- Android Smart Banner -->
+  <div id="android-banner">
+    <div style="display:flex;align-items:center">
+      <button class="close" onclick="document.getElementById('android-banner').style.display='none'">×</button>
+      <div class="info">
+        <div class="icon">TCSC</div>
+        <div class="text">
+          <h3>TCSC Mobile Trading</h3>
+          <p>TCSC - Free on Google Play</p>
+        </div>
+      </div>
+    </div>
+    <button class="view-btn" onclick="openFallback()">VIEW</button>
+  </div>
+
+  <div class="card content">
     <h1>TCSC GitHub Pages</h1>
     <p>Trang index cho kiểm thử Universal Links (iOS) và App Links (Android).</p>
 
@@ -93,6 +156,20 @@
     const DEEP_LINK_PATH = "/account-register";
 
     function isAndroid() { return /Android/i.test(navigator.userAgent); }
+    function isIOS() { return /iPhone|iPad|iPod/i.test(navigator.userAgent); }
+
+    // Logic mở fallback khi click nút VIEW trên banner
+    function openFallback() {
+      window.location.href = FALLBACK_PLAYSTORE;
+    }
+
+    // Hiển thị Android Banner nếu là Android
+    window.addEventListener('load', () => {
+      if (isAndroid()) {
+        const banner = document.getElementById('android-banner');
+        if (banner) banner.style.display = 'flex';
+      }
+    });
 
     function openHttpDeepLink(host) {
       const url = host.replace(/\/$/, '') + DEEP_LINK_PATH;
