@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Account Register | TCSC</title>
+  <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID, app-argument=https://spcable.github.io/tcsc.github.io/account-register">
+</head>
+<body>
+
+  <script>
+    // Tự động thử mở custom scheme khi vào trang này
+    window.onload = function() {
+      // Lấy query param từ URL hiện tại (ví dụ: ?NIEMCT0099)
+      var queryParams = window.location.search || "";
+      var schemeUrl = "tcismart://account-register" + queryParams;
+      
+      if (!/bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent)) {
+        setTimeout(function() {
+          window.location.href = schemeUrl;
+        }, 500);
+      }
+    };
+  </script>
+</body>
+</html>
